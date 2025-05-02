@@ -9,6 +9,8 @@ import {
 } from '../api';
 
 function UserList() {
+
+  //Stateful objects make the page rerender
   const [users, setUsers] = useState([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
