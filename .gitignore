@@ -44,3 +44,4 @@ out/
 *.tgz
 *.bak
 /client/node_modules
+data/mongod.cfg

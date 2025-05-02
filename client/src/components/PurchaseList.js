@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Joi from 'joi';
 import {
     getPurchases,
     createPurchase,
@@ -9,15 +8,8 @@ import {
 } from '../api';
 
 
-// Define Joi schemas for validation
-const emailSchema = Joi.string().email({ tlds: { allow: false } }).required();
-const addPurchaseSchema = Joi.object({
-    item: Joi.string().min(1).required(),
-    amount: Joi.number().min(0).required(),
-    userId: Joi.string().required(),
-});
-
 function PurchaseList() {
+    //Stateful objects for dynamic updating
     const [purchases, setPurchases] = useState([]);
     const [users, setUsers] = useState([]);
 

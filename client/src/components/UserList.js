@@ -28,11 +28,22 @@ function UserList() {
   }, []);
 
   const handleAdd = async () => {
-    const newUser = { name, email };
-    const res = await createUser(newUser);
-    setUsers([...users, res.data]);
-    setName('');
-    setEmail('');
+    try {
+      const newUser = { name, email };
+      const res = await createUser(newUser);
+      setUsers([...users, res.data]);
+      setName('');
+      setEmail('');
+    } catch (err) {
+      if (err.response && err.response.status === 400) {
+        const details = err.response.data.details || [err.response.data.message];
+        alert('Validation error:\n' + details.join('\n'));
+      } else {
+        console.error('Create user failed:', err);
+        alert('Something went wrong while adding the user.');
+      }
+    }
+    
   };
 
   const handleDelete = async (id) => {
@@ -74,13 +85,22 @@ function UserList() {
 
   const handleSaveEdit = async (id) => {
     try {
-      const res = await updateUser(id, { name: editName, email: editEmail });
+      const updatedUser = { name: editName, email: editEmail };
+      const res = await updateUser(id, updatedUser);
       setUsers(users.map((u) => (u._id === id ? res.data : u)));
       handleCancelEdit();
     } catch (err) {
-      console.error('Failed to update user:', err);
+      if (err.response && err.response.status === 400) {
+        // Joi validation error from backend
+        const details = err.response.data.details || [err.response.data.message];
+        alert('Validation error:\n' + details.join('\n'));
+      } else {
+        console.error('Failed to update user:', err);
+        alert('Something went wrong while updating the user.');
+      }
     }
   };
+  
 
   return (
     <div>
